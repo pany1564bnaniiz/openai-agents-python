@@ -19,6 +19,21 @@ We will increment `Z` for non-breaking changes:
 
 ## Breaking change changelog
 
+### 0.17.0
+
+In this version, sandbox `LocalFile` and `LocalDir` sources are now constrained to stay within the materialization `base_dir` by default. This closes a local artifact boundary issue, but it can affect applications that intentionally copy host files or directories from outside that base directory into a sandbox workspace.
+
+If your application passes trusted local paths outside `base_dir`, opt in explicitly on each affected entry:
+
+```python
+from agents.sandbox.entries import LocalDir, LocalFile
+
+LocalFile(src="/path/outside/base/config.json", allow_outside_base_dir=True)
+LocalDir(src="/path/outside/base/skills", allow_outside_base_dir=True)
+```
+
+Only set `allow_outside_base_dir=True` for trusted application-controlled paths. Do not enable it for paths derived from untrusted manifest input.
+
 ### 0.16.0
 
 In this version, the SDK default model is now `gpt-5.4-mini` instead of `gpt-4.1`. This affects agents and runs that do not explicitly set a model. Because the new default is a GPT-5 model, implicit default model settings now include GPT-5 defaults such as `reasoning.effort="none"` and `verbosity="low"`.
