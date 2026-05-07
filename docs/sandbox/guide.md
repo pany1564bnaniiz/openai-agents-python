@@ -236,6 +236,8 @@ Use manifest entries for the material the agent needs before work begins:
 
 </div>
 
+`LocalFile.src` and `LocalDir.src` are resolved against the SDK process working directory by default and must stay within that base directory. If trusted application code needs to materialize a host path outside the working directory, set `allow_outside_base_dir=True` on that entry and do not derive that path from untrusted manifest input.
+
 Mount entries describe what storage to expose; mount strategies describe how a sandbox backend attaches that storage. See [Sandbox clients](clients.md#mounts-and-remote-storage) for mount options and provider support.
 
 Good manifest design usually means keeping the workspace contract narrow, putting long task recipes in workspace files such as `repo/task.md`, and using relative workspace paths in instructions, for example `repo/task.md` or `output/report.md`. If the agent edits files with the `Filesystem` capability's `apply_patch` tool, remember that patch paths are relative to the sandbox workspace root, not the shell `workdir`.
